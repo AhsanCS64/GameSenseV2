@@ -520,7 +520,7 @@ def render_card(game: str, because: str, players: int, rank: int, cover_uri: str
     with st.container(border=True):
         st.markdown(
             f'<div style="display:flex;justify-content:flex-end;margin:-6px -8px 8px -8px;">'
-            f'<span style="padding:2px 10px;border-radius:999px;font-size:0.75rem;font-weight:700;'
+            f'<span style="padding:2px 8px;border-radius:999px;font-size:0.7rem;font-weight:700;'
             f'color:var(--gs-accent-2);background:var(--gs-surface-2);border:1px solid var(--gs-border);">#{rank}</span>'
             f"</div>",
             unsafe_allow_html=True,
@@ -529,19 +529,25 @@ def render_card(game: str, because: str, players: int, rank: int, cover_uri: str
             st.image(cover_uri, width="stretch")
         else:
             st.markdown(
-                f'<div style="height:160px;display:grid;place-items:center;'
-                f'border-radius:10px;border:1px dashed var(--gs-border);background:var(--gs-surface-2);'
-                f'color:var(--gs-muted);font-size:3rem;font-weight:800;letter-spacing:0.06em">'
+                f'<div style="height:110px;display:grid;place-items:center;'
+                f'border-radius:8px;border:1px dashed var(--gs-border);background:var(--gs-surface-2);'
+                f'color:var(--gs-muted);font-size:2.2rem;font-weight:800;letter-spacing:0.06em">'
                 f"{_esc(game[:1].upper())}</div>",
                 unsafe_allow_html=True,
             )
-        st.markdown(f"### {game}")
         st.markdown(
-            f'<p style="margin:0;color:var(--gs-accent);font-size:0.9rem;'
-            f'font-weight:600">Because you liked <strong style="color:var(--gs-text);">{_esc(because)}</strong></p>',
+            f'<div style="font-weight:700;font-size:0.95rem;color:var(--gs-text);line-height:1.3;margin:0.5rem 0 0.25rem;">{game}</div>',
             unsafe_allow_html=True,
         )
-        st.metric("Players in dataset", f"{players:,}")
+        st.markdown(
+            f'<p style="margin:0 0 0.4rem 0;color:var(--gs-accent);font-size:0.8rem;'
+            f'line-height:1.4">Because you liked <strong style="color:var(--gs-text);">{_esc(because)}</strong></p>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:0.5rem;"><span style="font-size:0.75rem;color:var(--gs-muted)">👥 {players:,} players</span></div>',
+            unsafe_allow_html=True,
+        )
 
 
 def render_pills(items: list[tuple[str, str]], label: str) -> None:
@@ -732,8 +738,13 @@ def main() -> None:
         )
         covers = load_covers([row["game"] for row in rows], st.session_state["covers"])
 
-        for row in rows:
-            render_card(row["game"], row["because"], row["players"], row["rank"], covers.get(row["game"]))
+        # Render cards in rows of 3
+        for start in range(0, len(rows), 3):
+            chunk = rows[start:start + 3]
+            cols = st.columns(len(chunk), gap="medium")
+            for col, row in zip(cols, chunk):
+                with col:
+                    render_card(row["game"], row["because"], row["players"], row["rank"], covers.get(row["game"]))
 
         csv = pd.DataFrame(
             [
