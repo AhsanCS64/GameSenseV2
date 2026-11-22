@@ -158,7 +158,7 @@ The suite covers title normalization, all three matching stages, that games you 
 
 ## 👤 Author
 
-Built by **H. M. Ahsan Habib**.
+Built by **H. M. Ahsan Habib Kushal**.
 
 ---
 
