@@ -1,4 +1,6 @@
 # GameSense — tested versions (Streamlit Community Cloud compatible)
+# Pinned to versions available on Python 3.11 (Streamlit Cloud default).
+# If you select Python 3.12+ in advanced settings, you can use newer versions.
 streamlit==1.67.0
-numpy==2.5.2
-pandas==3.0.5
+numpy==2.4.6
+pandas==2.2.3

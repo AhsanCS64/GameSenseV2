@@ -65,4 +65,11 @@ python -m pytest -q
 1. Push this folder to a GitHub repo (everything is well under 100 MB).
 2. Go to streamlit.io/cloud, add the app from your repo.
 3. Set the entry point to `app.py`, branch `main`.
-4. Deploy. The app loads `gamesense_artifacts.npz` and `games.json` from paths relative to `app.py`, so it works straight from the repo.
+4. **Advanced settings:**
+   - Main file path: `app.py`
+   - Requirements file path: `requirements.txt`
+   - Python version: `3.11` (default) — requirements are pinned accordingly.
+   - Working directory: leave blank (repo root).
+   - Environment variables / secrets: leave blank — none needed.
+   - If you prefer Python 3.12+, update `requirements.txt` to `numpy==2.5.2` and `pandas==3.0.5`.
+5. Deploy. The app loads `gamesense_artifacts.npz` and `games.json` from paths relative to `app.py`, so it works straight from the repo.
