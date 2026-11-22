@@ -284,25 +284,53 @@ def load_covers(titles: list[str], enabled: bool) -> dict[str, str | None]:
 
 
 # --------------------------------------------------------------------------- #
-# Styling (light touch; layout is native Streamlit)
+# Theming (light / dark)
 # --------------------------------------------------------------------------- #
 
-GLOBAL_CSS = """
-<style>
+
+def theme_variables(light: bool) -> str:
+    if light:
+        return """
+:root {
+  --gs-bg: #f8fafc;
+  --gs-surface: #ffffff;
+  --gs-surface-2: #f1f5f9;
+  --gs-border: #cbd5e1;
+  --gs-text: #0f172a;
+  --gs-muted: #64748b;
+  --gs-accent: #6d28d9;
+  --gs-accent-rgb: 109, 40, 217;
+  --gs-accent-2: #0891b2;
+  --gs-accent-2-rgb: 8, 145, 178;
+  --gs-good: #059669;
+  --gs-warn: #d97706;
+  --gs-card-bg: #ffffff;
+}
+"""
+    return """
 :root {
   --gs-bg: #070b12;
   --gs-surface: #111827;
-  --gs-accent: #8b5cf6;
-  --gs-accent-2: #22d3ee;
-  --gs-good: #34d399;
+  --gs-surface-2: #161f2e;
   --gs-border: #243044;
   --gs-text: #e9eefb;
   --gs-muted: #9fb0c9;
+  --gs-accent: #8b5cf6;
+  --gs-accent-rgb: 139, 92, 246;
+  --gs-accent-2: #22d3ee;
+  --gs-accent-2-rgb: 34, 211, 238;
+  --gs-good: #34d399;
+  --gs-warn: #fbbf24;
+  --gs-card-bg: linear-gradient(180deg, #141d2c 0%, #0f1520 100%);
 }
+"""
+
+
+SHARED_CSS = """
 .stApp {
   background:
-    radial-gradient(1100px 560px at 12% -12%, rgba(139, 92, 246, 0.20), transparent 62%),
-    radial-gradient(900px 520px at 100% 0%, rgba(34, 211, 238, 0.13), transparent 58%),
+    radial-gradient(1100px 560px at 12% -12%, rgba(var(--gs-accent-rgb), 0.20), transparent 62%),
+    radial-gradient(900px 520px at 100% 0%, rgba(var(--gs-accent-2-rgb), 0.13), transparent 58%),
     var(--gs-bg);
 }
 [data-testid="stHeader"] { background: transparent; }
@@ -314,12 +342,37 @@ GLOBAL_CSS = """
 }
 html, body, .stApp, [data-testid="stSidebar"] * {
   font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--gs-text);
 }
 [data-testid="stSidebar"] {
-  background: #0b111b;
-  border-right: 1px solid var(--gs-border);
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
 }
 [data-testid="stSidebar"] .block-container { padding-top: 1.4rem; }
+/* Suppress Streamlit's native sidebar collapse/expand controls */
+[data-testid="collapsedControl"],
+button[data-testid="collapsedControl"],
+[data-testid="collapsedControl"] *,
+[data-testid="stSidebarCollapsedControl"],
+button[data-testid="stSidebarCollapsedControl"],
+.stApp [data-testid="stSidebar"] button:first-child,
+.stApp [data-testid="stSidebar"] section button:first-child,
+.stApp [data-testid="stSidebar"] > div > button:first-child,
+button[aria-label="Collapse sidebar"],
+button[aria-label="collapse sidebar"],
+button[aria-label="Expand sidebar"],
+button[aria-label="expand sidebar"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+}
 
 .gs-brand {
   display: inline-flex; align-items: center; gap: 0.55rem;
@@ -330,14 +383,14 @@ html, body, .stApp, [data-testid="stSidebar"] * {
   display: grid; place-items: center; width: 30px; height: 30px;
   border-radius: 9px; font-size: 0.85rem; color: #fff;
   background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2));
-  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 6px 18px rgba(var(--gs-accent-rgb), 0.35);
 }
 .gs-hero h1 {
   margin: 0.4rem 0 0.35rem;
   font-size: clamp(1.9rem, 4.2vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
-  background: linear-gradient(92deg, #ffffff 20%, #c4b5fd 65%, #67e8f9 100%);
+  background: linear-gradient(92deg, var(--gs-text) 20%, var(--gs-accent) 65%, var(--gs-accent-2) 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -345,15 +398,29 @@ html, body, .stApp, [data-testid="stSidebar"] * {
 .gs-stats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.9rem 0 0.2rem; }
 .gs-stat {
   display: inline-flex; align-items: baseline; gap: 0.4rem;
-  padding: 0.38rem 0.7rem; border-radius: 999px;
-  background: rgba(139, 92, 246, 0.10);
-  border: 1px solid rgba(139, 92, 246, 0.30);
+  padding: 0.45rem 0.9rem; border-radius: 10px;
+  background: var(--gs-surface-2);
+  border: 1px solid var(--gs-border);
   color: var(--gs-muted); font-size: 0.8rem;
 }
-.gs-stat b { color: var(--gs-text); font-size: 0.88rem; }
+.gs-stat b { color: var(--gs-text); font-size: 0.95rem; }
+[data-testid="stMetric"] {
+  background: var(--gs-surface-2);
+  border: 1px solid var(--gs-border);
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+}
+[data-testid="stMetric"] [data-testid="stMetricValue"],
+[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+  color: var(--gs-text) !important;
+}
+[data-testid="stMetric"] [data-testid="stMetricLabel"] {
+  color: var(--gs-muted) !important;
+}
+[data-testid="stMetricValue"] { font-size: 1.1rem !important; }
 .gs-kicker {
   margin: 0.15rem 0 0.5rem; font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase; color: #a5b4cf;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--gs-muted);
 }
 .gs-sec {
   display: flex; align-items: flex-end; justify-content: space-between;
@@ -368,18 +435,30 @@ html, body, .stApp, [data-testid="stSidebar"] * {
   padding: 0.24rem 0.6rem; border-radius: 999px;
   font-size: 0.79rem; border: 1px solid; line-height: 1.3;
 }
-.gs-pill.ok { color: #a7f3d0; background: rgba(52, 211, 153, 0.10); border-color: rgba(52, 211, 153, 0.42); }
-.gs-pill.bad { color: #fde68a; background: rgba(251, 191, 36, 0.10); border-color: rgba(251, 191, 36, 0.42); }
-.gs-pill.dim { color: #c7d2e5; background: rgba(148, 163, 184, 0.10); border-color: rgba(148, 163, 184, 0.34); }
+.gs-pill.ok {
+  color: var(--gs-good);
+  background: rgba(5, 150, 105, 0.10);
+  border-color: rgba(5, 150, 105, 0.42);
+}
+.gs-pill.bad {
+  color: var(--gs-warn);
+  background: rgba(217, 119, 6, 0.10);
+  border-color: rgba(217, 119, 6, 0.42);
+}
+.gs-pill.dim {
+  color: var(--gs-muted);
+  background: rgba(100, 116, 139, 0.10);
+  border-color: rgba(100, 116, 139, 0.34);
+}
 
 .stButton > button {
   border-radius: 10px; border: 1px solid var(--gs-border);
-  background: var(--gs-surface); color: var(--gs-text); font-weight: 600;
+  background: var(--gs-surface-2); color: var(--gs-text); font-weight: 600;
   transition: border-color 120ms ease, background 120ms ease;
 }
-.stButton > button:hover { border-color: var(--gs-accent); background: #1b2740; color: #ffffff; }
+.stButton > button:hover { border-color: var(--gs-accent); background: var(--gs-surface-2); color: var(--gs-accent-2); }
 .stButton > button[kind="primary"] {
-  background: linear-gradient(135deg, #7c3aed, #0891b2); border-color: transparent;
+  background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2)); border-color: transparent;
 }
 .stButton > button[kind="primary"]:hover { filter: brightness(1.1); }
 .stButton > button:focus-visible,
@@ -388,8 +467,8 @@ html, body, .stApp, [data-testid="stSidebar"] * {
   outline: 2px solid var(--gs-accent-2); outline-offset: 2px;
 }
 [data-baseweb="tag"] {
-  background: rgba(139, 92, 246, 0.20) !important;
-  border: 1px solid rgba(139, 92, 246, 0.52) !important;
+  background: var(--gs-surface-2) !important;
+  border: 1px solid var(--gs-accent) !important;
 }
 [data-baseweb="tag"] span { color: var(--gs-text) !important; }
 [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
@@ -400,19 +479,18 @@ html, body, .stApp, [data-testid="stSidebar"] * {
 }
 [data-testid="stExpander"] details {
   border: 1px solid var(--gs-border); border-radius: 14px;
-  background: rgba(17, 24, 39, 0.6);
+  background: var(--gs-surface-2);
 }
-a { color: #93c5fd; }
+a { color: var(--gs-accent-2); }
 a:focus-visible { outline: 2px solid var(--gs-accent-2); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .stButton > button { transition: none; }
 }
-</style>
 """
 
 
 # --------------------------------------------------------------------------- #
-# Rendering helpers (native Streamlit where possible)
+# Rendering helpers
 # --------------------------------------------------------------------------- #
 
 
@@ -443,7 +521,7 @@ def render_card(game: str, because: str, players: int, rank: int, cover_uri: str
         st.markdown(
             f'<div style="display:flex;justify-content:flex-end;margin:-6px -8px 8px -8px;">'
             f'<span style="padding:2px 10px;border-radius:999px;font-size:0.75rem;font-weight:700;'
-            f'color:#f3f6ff;background:rgba(7,11,18,0.8);border:1px solid rgba(233,238,251,0.2)">#{rank}</span>'
+            f'color:var(--gs-accent-2);background:var(--gs-surface-2);border:1px solid var(--gs-border);">#{rank}</span>'
             f"</div>",
             unsafe_allow_html=True,
         )
@@ -452,13 +530,17 @@ def render_card(game: str, because: str, players: int, rank: int, cover_uri: str
         else:
             st.markdown(
                 f'<div style="height:160px;display:grid;place-items:center;'
-                f'border-radius:10px;border:1px dashed var(--gs-border);background:#101724;'
-                f'color:#5b6b89;font-size:3rem;font-weight:800;letter-spacing:0.06em">'
+                f'border-radius:10px;border:1px dashed var(--gs-border);background:var(--gs-surface-2);'
+                f'color:var(--gs-muted);font-size:3rem;font-weight:800;letter-spacing:0.06em">'
                 f"{_esc(game[:1].upper())}</div>",
                 unsafe_allow_html=True,
             )
         st.markdown(f"### {game}")
-        st.caption(f"Because you liked {because}")
+        st.markdown(
+            f'<p style="margin:0;color:var(--gs-accent);font-size:0.9rem;'
+            f'font-weight:600">Because you liked <strong style="color:var(--gs-text);">{_esc(because)}</strong></p>',
+            unsafe_allow_html=True,
+        )
         st.metric("Players in dataset", f"{players:,}")
 
 
@@ -476,8 +558,22 @@ def render_pills(items: list[tuple[str, str]], label: str) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="GameSense", page_icon="🎮", layout="wide", initial_sidebar_state="expanded")
-    st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
+    st.set_page_config(page_title="GameSense", page_icon="🎮", layout="wide", initial_sidebar_state="collapsed")
+
+    if "theme_light" not in st.session_state:
+        st.session_state["theme_light"] = False
+    if "liked" not in st.session_state:
+        st.session_state["liked"] = []
+    if "typed" not in st.session_state:
+        st.session_state["typed"] = ""
+    if "covers" not in st.session_state:
+        st.session_state["covers"] = True
+
+    def _on_theme_toggle() -> None:
+        st.session_state["theme_light"] = st.session_state["theme_toggle"]
+
+    theme_css_block = theme_variables(st.session_state["theme_light"])
+    st.markdown("<style>" + theme_css_block + SHARED_CSS + "</style>", unsafe_allow_html=True)
 
     try:
         artifacts = load_artifacts_cached()
@@ -489,13 +585,6 @@ def main() -> None:
         return
 
     catalog = artifacts.catalog
-
-    if "liked" not in st.session_state:
-        st.session_state["liked"] = []
-    if "typed" not in st.session_state:
-        st.session_state["typed"] = ""
-    if "covers" not in st.session_state:
-        st.session_state["covers"] = True
 
     def add_game(title: str) -> None:
         liked = list(st.session_state.get("liked") or [])
@@ -514,29 +603,33 @@ def main() -> None:
         st.session_state["liked"] = []
         st.session_state["typed"] = ""
 
-    with st.sidebar:
-        st.markdown(
-            '<div class="gs-brand"><span class="gs-logo" aria-hidden="true">&#9654;</span>GameSense</div>',
-            unsafe_allow_html=True,
-        )
-        st.caption("Personalized picks from your Steam history model.")
-        st.divider()
-        k = st.slider("How many recommendations", min_value=3, max_value=30, value=10, step=1)
-        st.caption("Ranked by the model, best first.")
-        st.divider()
-        st.toggle(
-            "Steam cover art",
-            key="covers",
-            help="Best effort, fetched from the public Steam store and cached. Turn off to stay fully offline.",
-        )
-        st.button("Clear all", on_click=clear_all, width="stretch")
-        st.divider()
-        st.caption(
-            "Inference: user vector = mean of liked-game embeddings, scored against every "
-            "catalogue game. Games you already listed are removed."
-        )
-
     render_hero(catalog)
+
+    # Controls panel (replaces Streamlit's native sidebar to avoid its collapse arrow)
+    with st.container(border=True):
+        tc1, tc2, tc3, tc4 = st.columns([1.6, 1.4, 1.6, 1.2])
+        with tc1:
+            st.toggle(
+                "Light mode",
+                value=st.session_state["theme_light"],
+                key="theme_toggle",
+                on_change=_on_theme_toggle,
+            )
+        with tc2:
+            k = st.slider("How many recommendations", min_value=3, max_value=30, value=10, step=1)
+            st.caption("Ranked by the model, best first.")
+        with tc3:
+            st.toggle(
+                "Steam cover art",
+                key="covers",
+                help="Best effort, fetched from the public Steam store and cached. Turn off to stay fully offline.",
+            )
+        with tc4:
+            st.button("Clear all", on_click=clear_all, width="stretch")
+    st.caption(
+        "Inference: user vector = mean of liked-game embeddings, scored against every "
+        "catalogue game. Games you already listed are removed."
+    )
 
     st.markdown('<p class="gs-kicker">Step 1 — pick your games</p>', unsafe_allow_html=True)
     with st.container(border=True):
@@ -661,9 +754,6 @@ def main() -> None:
             mime="text/csv",
             width="content",
         )
-
-        if st.session_state["covers"] and not any(covers.values()):
-            pass
 
     st.markdown("")
     report = REPORT_PATH.read_text(encoding="utf-8") if REPORT_PATH.exists() else ""

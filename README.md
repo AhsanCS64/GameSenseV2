@@ -57,6 +57,7 @@ python -m pytest -q
 - Optional Steam cover art (public store search, cached, degrades to letter placeholders fully offline)
 - Empty state, single-game warning, duplicate/unmatched notices, CSV download
 - "About the model" drawer with plain-language metrics and the 2016 Steam-data caveat
+- Light/dark theme toggle with mode-aware color coding (sidebar)
 - Dark responsive theme, keyboard navigation and focus states
 
 ## Deployment (Streamlit Community Cloud)
