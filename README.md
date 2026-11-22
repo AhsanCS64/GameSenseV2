@@ -9,15 +9,17 @@ Pure NumPy inference, no retraining, no placeholder data.
 
 <br>
 
-[![Live App](https://img.shields.io/badge/▶_Live_App-gamesense--v2.streamlit.app-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://gamesense-v2.streamlit.app/)
+[![Live App](https://img.shields.io/badge/▶_Live_App-gamesense--v2.streamlit.app-10b981?style=for-the-badge&logo=streamlit&logoColor=white)](https://gamesense-v2.streamlit.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-092D20?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AhsanCS64/GameSenseV2)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Ahsan_Habib-00f5a0?style=for-the-badge&logo=vercel&logoColor=black)](https://ahsanhabibkushal.vercel.app/)
 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-app-10b981?style=flat-square&logo=streamlit&logoColor=white)
 ![NumPy](https://img.shields.io/badge/NumPy-inference-013243?style=flat-square&logo=numpy&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-training-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
 
-**[Try it live →](https://gamesense-v2.streamlit.app/)**
+**[Try it live →](https://gamesense-v2.streamlit.app/)** • **[GitHub Repository →](https://github.com/AhsanCS64/GameSenseV2)** • **[Portfolio →](https://ahsanhabibkushal.vercel.app/)**
 
 </div>
 
@@ -158,7 +160,10 @@ The suite covers title normalization, all three matching stages, that games you 
 
 ## 👤 Author
 
-Built by **H. M. Ahsan Habib Kushal**.
+Built by **[H. M. Ahsan Habib Kushal](https://ahsanhabibkushal.vercel.app/)**
+- **Portfolio:** [ahsanhabibkushal.vercel.app](https://ahsanhabibkushal.vercel.app/)
+- **GitHub:** [@AhsanCS64](https://github.com/AhsanCS64)
+- **Repository:** [AhsanCS64/GameSenseV2](https://github.com/AhsanCS64/GameSenseV2)
 
 ---
 

@@ -292,53 +292,132 @@ def theme_variables(light: bool) -> str:
     if light:
         return """
 :root {
-  --gs-bg: #f8fafc;
+  --gs-bg: #f8f9f3;
   --gs-surface: #ffffff;
-  --gs-surface-2: #f1f5f9;
-  --gs-border: #cbd5e1;
-  --gs-text: #0f172a;
-  --gs-muted: #64748b;
-  --gs-accent: #6d28d9;
-  --gs-accent-rgb: 109, 40, 217;
-  --gs-accent-2: #0891b2;
-  --gs-accent-2-rgb: 8, 145, 178;
+  --gs-surface-2: #edf3e8;
+  --gs-surface-3: #e2ecd9;
+  --gs-border: #c2cfbd;
+  --gs-border-hover: #10b981;
+  --gs-text: #092d20;
+  --gs-muted: #516a57;
+  --gs-accent: #0f6645;
+  --gs-accent-rgb: 15, 102, 69;
+  --gs-accent-2: #10b981;
+  --gs-accent-2-rgb: 16, 185, 129;
+  --gs-accent-3: #0284c7;
+  --gs-accent-3-rgb: 2, 132, 199;
+  --gs-accent-4: #f59e0b;
   --gs-good: #059669;
   --gs-warn: #d97706;
   --gs-card-bg: #ffffff;
+  --gs-card-hover: #fcfdfa;
+  --gs-glow: rgba(16, 185, 129, 0.22);
 }
 """
     return """
 :root {
-  --gs-bg: #070b12;
-  --gs-surface: #111827;
-  --gs-surface-2: #161f2e;
-  --gs-border: #243044;
-  --gs-text: #e9eefb;
-  --gs-muted: #9fb0c9;
-  --gs-accent: #8b5cf6;
-  --gs-accent-rgb: 139, 92, 246;
-  --gs-accent-2: #22d3ee;
-  --gs-accent-2-rgb: 34, 211, 238;
+  --gs-bg: #061510;
+  --gs-surface: #0a2118;
+  --gs-surface-2: #0e2d21;
+  --gs-surface-3: #13392a;
+  --gs-border: #1a4233;
+  --gs-border-hover: #00f5a0;
+  --gs-text: #f2f7f4;
+  --gs-muted: #9eb58e;
+  --gs-accent: #10b981;
+  --gs-accent-rgb: 16, 185, 129;
+  --gs-accent-2: #00f5a0;
+  --gs-accent-2-rgb: 0, 245, 160;
+  --gs-accent-3: #38bdf8;
+  --gs-accent-3-rgb: 56, 189, 248;
+  --gs-accent-4: #fbbf24;
+  --gs-accent-5: #a855f7;
   --gs-good: #34d399;
   --gs-warn: #fbbf24;
-  --gs-card-bg: linear-gradient(180deg, #141d2c 0%, #0f1520 100%);
+  --gs-card-bg: linear-gradient(150deg, #0e2b20 0%, #081a13 100%);
+  --gs-card-hover: linear-gradient(150deg, #13382b 0%, #0a2219 100%);
+  --gs-glow: rgba(0, 245, 160, 0.28);
 }
 """
 
 
 SHARED_CSS = """
+@keyframes gsAurora {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+  50% {
+    background-position: 8% 4%, 92% 6%, 48% 95%;
+  }
+  100% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+}
+
+@keyframes gsGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gsPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(var(--gs-accent-2-rgb), 0.35), 0 0 30px rgba(var(--gs-accent-rgb), 0.2);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(var(--gs-accent-2-rgb), 0.6), 0 0 45px rgba(var(--gs-accent-rgb), 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes gsRadarPing {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  75% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes gsCardRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gsBorderFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .stApp {
   background:
-    radial-gradient(1100px 560px at 12% -12%, rgba(var(--gs-accent-rgb), 0.20), transparent 62%),
-    radial-gradient(900px 520px at 100% 0%, rgba(var(--gs-accent-2-rgb), 0.13), transparent 58%),
+    radial-gradient(1100px 580px at 12% -10%, rgba(var(--gs-accent-rgb), 0.28), transparent 64%),
+    radial-gradient(900px 520px at 98% 5%, rgba(var(--gs-accent-2-rgb), 0.20), transparent 58%),
+    radial-gradient(850px 480px at 50% 100%, rgba(56, 189, 248, 0.12), transparent 60%),
     var(--gs-bg);
+  background-attachment: fixed;
+  animation: gsAurora 22s ease-in-out infinite alternate;
 }
 [data-testid="stHeader"] { background: transparent; }
 #MainMenu, footer { visibility: hidden; }
 .block-container {
-  max-width: 1180px;
-  padding-top: 2.2rem;
-  padding-bottom: 3rem;
+  max-width: 1200px;
+  padding-top: 1.6rem;
+  padding-bottom: 3.5rem;
 }
 html, body, .stApp, [data-testid="stSidebar"] * {
   font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -351,7 +430,6 @@ html, body, .stApp, [data-testid="stSidebar"] * {
     min-width: 0 !important;
 }
 [data-testid="stSidebar"] .block-container { padding-top: 1.4rem; }
-/* Suppress Streamlit's native sidebar collapse/expand controls */
 [data-testid="collapsedControl"],
 button[data-testid="collapsedControl"],
 [data-testid="collapsedControl"] *,
@@ -374,116 +452,618 @@ button[aria-label="expand sidebar"] {
     z-index: -1 !important;
 }
 
+/* Top bar with links */
+.gs-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 14px;
+  background: rgba(14, 45, 33, 0.55);
+  border: 1px solid var(--gs-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+.gs-brand-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
 .gs-brand {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  font-weight: 800; letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
   color: var(--gs-text);
 }
 .gs-logo {
-  display: grid; place-items: center; width: 30px; height: 30px;
-  border-radius: 9px; font-size: 0.85rem; color: #fff;
-  background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2));
-  box-shadow: 0 6px 18px rgba(var(--gs-accent-rgb), 0.35);
-}
-.gs-hero h1 {
-  margin: 0.4rem 0 0.35rem;
-  font-size: clamp(1.9rem, 4.2vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  background: linear-gradient(92deg, var(--gs-text) 20%, var(--gs-accent) 65%, var(--gs-accent-2) 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.gs-hero p { margin: 0; max-width: 62ch; color: var(--gs-muted); font-size: 1rem; line-height: 1.55; }
-.gs-stats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.9rem 0 0.2rem; }
-.gs-stat {
-  display: inline-flex; align-items: baseline; gap: 0.4rem;
-  padding: 0.45rem 0.9rem; border-radius: 10px;
-  background: var(--gs-surface-2);
-  border: 1px solid var(--gs-border);
-  color: var(--gs-muted); font-size: 0.8rem;
-}
-.gs-stat b { color: var(--gs-text); font-size: 0.95rem; }
-[data-testid="stMetric"] {
-  background: var(--gs-surface-2);
-  border: 1px solid var(--gs-border);
-  padding: 0.6rem 0.9rem;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
   border-radius: 10px;
+  font-size: 0.9rem;
+  color: #061510;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gs-accent-2) 0%, var(--gs-accent) 60%, var(--gs-accent-3) 100%);
+  animation: gsPulseGlow 3.5s ease-in-out infinite;
 }
-[data-testid="stMetric"] [data-testid="stMetricValue"],
+.gs-badge-version {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--gs-accent-2);
+  background: rgba(0, 245, 160, 0.12);
+  border: 1px solid rgba(0, 245, 160, 0.35);
+  letter-spacing: 0.05em;
+}
+.gs-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--gs-muted);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.gs-status-dot-wrap {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.gs-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gs-accent-2);
+}
+.gs-status-dot-pulse {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gs-accent-2);
+  animation: gsRadarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.gs-nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+.gs-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--gs-border);
+  background: var(--gs-surface-2);
+  color: var(--gs-text) !important;
+}
+.gs-nav-btn:hover {
+  border-color: var(--gs-accent-2);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 245, 160, 0.3);
+}
+.gs-nav-btn.gs-nav-github:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(56, 189, 248, 0.25));
+  border-color: var(--gs-accent-2);
+}
+.gs-nav-btn.gs-nav-portfolio {
+  border-color: rgba(0, 245, 160, 0.4);
+  background: linear-gradient(135deg, rgba(0, 245, 160, 0.12), rgba(16, 185, 129, 0.08));
+}
+.gs-nav-btn.gs-nav-portfolio:hover {
+  background: linear-gradient(135deg, rgba(0, 245, 160, 0.3), rgba(16, 185, 129, 0.25));
+  border-color: var(--gs-accent-2);
+  box-shadow: 0 4px 16px rgba(0, 245, 160, 0.35);
+}
+.gs-nav-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.gs-btn-arrow {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+.gs-nav-btn:hover .gs-btn-arrow {
+  transform: translate(2px, -2px);
+  opacity: 1;
+}
+
+/* Hero Section */
+.gs-hero-wrap {
+  margin: 0.5rem 0 1.25rem;
+}
+.gs-hero-title {
+  margin: 0.3rem 0 0.5rem;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 800;
+  color: var(--gs-text);
+}
+.gs-gradient-word {
+  background: linear-gradient(90deg, #f2f7f4 0%, var(--gs-accent-2) 28%, var(--gs-accent-3) 65%, #a855f7 90%, var(--gs-accent-2) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gsGradientShift 7s linear infinite;
+}
+.gs-hero-subtitle {
+  margin: 0 0 1rem;
+  max-width: 68ch;
+  color: var(--gs-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.gs-highlight-tag {
+  color: var(--gs-accent-2);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 245, 160, 0.4);
+}
+
+/* Stats / Metrics */
+[data-testid="stMetric"] {
+  background: var(--gs-surface-2) !important;
+  border: 1px solid var(--gs-border) !important;
+  padding: 0.7rem 1rem !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+[data-testid="stMetric"]:hover {
+  transform: translateY(-3px);
+  border-color: var(--gs-accent-2) !important;
+  box-shadow: 0 8px 24px rgba(0, 245, 160, 0.2) !important;
+}
+[data-testid="stMetric"] [data-testid="stMetricValue"] {
+  color: var(--gs-accent-2) !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+}
 [data-testid="stMetric"] [data-testid="stMetricDelta"] {
   color: var(--gs-text) !important;
 }
 [data-testid="stMetric"] [data-testid="stMetricLabel"] {
   color: var(--gs-muted) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
 }
-[data-testid="stMetricValue"] { font-size: 1.1rem !important; }
+
 .gs-kicker {
-  margin: 0.15rem 0 0.5rem; font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--gs-muted);
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gs-accent-2);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.gs-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gs-accent-2);
+  box-shadow: 0 0 8px var(--gs-accent-2);
 }
 .gs-sec {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 1rem; flex-wrap: wrap; margin: 0.35rem 0 0.15rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.8rem 0 0.3rem;
 }
-.gs-sec h2 { margin: 0; font-size: 1.35rem; color: var(--gs-text); letter-spacing: -0.01em; }
-.gs-sec p { margin: 0; color: var(--gs-muted); font-size: 0.85rem; }
+.gs-sec h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  color: var(--gs-text);
+  letter-spacing: -0.015em;
+  font-weight: 800;
+}
+.gs-sec p {
+  margin: 0;
+  color: var(--gs-muted);
+  font-size: 0.88rem;
+}
 
-.gs-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0 0.2rem; }
+/* Pills */
+.gs-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0.3rem;
+}
 .gs-pill {
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  padding: 0.24rem 0.6rem; border-radius: 999px;
-  font-size: 0.79rem; border: 1px solid; line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid;
+  line-height: 1.3;
+  transition: all 0.2s ease;
+}
+.gs-pill:hover {
+  transform: translateY(-2px);
 }
 .gs-pill.ok {
-  color: var(--gs-good);
-  background: rgba(5, 150, 105, 0.10);
-  border-color: rgba(5, 150, 105, 0.42);
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.45);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
 }
 .gs-pill.bad {
-  color: var(--gs-warn);
-  background: rgba(217, 119, 6, 0.10);
-  border-color: rgba(217, 119, 6, 0.42);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(251, 191, 36, 0.45);
 }
 .gs-pill.dim {
   color: var(--gs-muted);
-  background: rgba(100, 116, 139, 0.10);
-  border-color: rgba(100, 116, 139, 0.34);
+  background: rgba(158, 181, 142, 0.10);
+  border-color: rgba(158, 181, 142, 0.32);
 }
 
+/* Buttons */
 .stButton > button {
-  border-radius: 10px; border: 1px solid var(--gs-border);
-  background: var(--gs-surface-2); color: var(--gs-text); font-weight: 600;
-  transition: border-color 120ms ease, background 120ms ease;
+  border-radius: 11px;
+  border: 1px solid var(--gs-border);
+  background: var(--gs-surface-2);
+  color: var(--gs-text);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  position: relative;
+  overflow: hidden;
 }
-.stButton > button:hover { border-color: var(--gs-accent); background: var(--gs-surface-2); color: var(--gs-accent-2); }
+.stButton > button:hover {
+  border-color: var(--gs-accent-2);
+  background: var(--gs-surface-3);
+  color: var(--gs-accent-2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 245, 160, 0.22);
+}
+.stButton > button:active {
+  transform: scale(0.98);
+}
 .stButton > button[kind="primary"] {
-  background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2)); border-color: transparent;
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #00f5a0 100%) !important;
+  color: #061510 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 4px 18px rgba(0, 245, 160, 0.35) !important;
 }
-.stButton > button[kind="primary"]:hover { filter: brightness(1.1); }
+.stButton > button[kind="primary"]:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 8px 28px rgba(0, 245, 160, 0.5) !important;
+  transform: translateY(-2px) scale(1.015);
+}
 .stButton > button:focus-visible,
 [data-baseweb="select"]:focus-within,
 [data-testid="stTextArea"] textarea:focus-visible {
-  outline: 2px solid var(--gs-accent-2); outline-offset: 2px;
+  outline: 2px solid var(--gs-accent-2);
+  outline-offset: 2px;
 }
 [data-baseweb="tag"] {
   background: var(--gs-surface-2) !important;
-  border: 1px solid var(--gs-accent) !important;
+  border: 1px solid var(--gs-accent-2) !important;
+  border-radius: 8px !important;
 }
-[data-baseweb="tag"] span { color: var(--gs-text) !important; }
+[data-baseweb="tag"] span {
+  color: var(--gs-text) !important;
+  font-weight: 600 !important;
+}
 [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
 [data-testid="stTextArea"] textarea {
   background: var(--gs-surface) !important;
   border-color: var(--gs-border) !important;
   color: var(--gs-text) !important;
+  border-radius: 11px !important;
+}
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+[data-testid="stTextArea"] textarea:hover {
+  border-color: var(--gs-border-hover) !important;
 }
 [data-testid="stExpander"] details {
-  border: 1px solid var(--gs-border); border-radius: 14px;
+  border: 1px solid var(--gs-border);
+  border-radius: 14px;
   background: var(--gs-surface-2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
-a { color: var(--gs-accent-2); }
+[data-testid="stExpander"] summary:hover {
+  color: var(--gs-accent-2) !important;
+}
+
+/* Glassmorphism Containers */
+[data-testid="stVerticalBlockBorderWrapper"] {
+  background: rgba(10, 33, 24, 0.5) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--gs-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Modern Recommendation Card */
+.gs-card-container {
+  background: var(--gs-card-bg);
+  border: 1px solid var(--gs-border);
+  border-radius: 14px;
+  padding: 0.95rem;
+  margin-bottom: 0.85rem;
+  transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  animation: gsCardRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.gs-card-container:hover {
+  transform: translateY(-7px) scale(1.015);
+  border-color: var(--gs-accent-2);
+  background: var(--gs-card-hover);
+  box-shadow: 0 20px 38px -10px rgba(0, 245, 160, 0.32), 0 0 20px rgba(16, 185, 129, 0.18);
+}
+.gs-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+.gs-rank-pill {
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #061510;
+  background: linear-gradient(135deg, var(--gs-accent-2) 0%, var(--gs-accent) 100%);
+  box-shadow: 0 2px 8px rgba(0, 245, 160, 0.4);
+}
+.gs-player-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gs-muted);
+  background: rgba(14, 45, 33, 0.6);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--gs-border);
+}
+.gs-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gs-accent-2);
+  box-shadow: 0 0 6px var(--gs-accent-2);
+}
+.gs-cover-box {
+  width: 100%;
+  height: 125px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.65rem;
+  background: var(--gs-surface-2);
+  border: 1px solid rgba(194, 216, 181, 0.1);
+  position: relative;
+}
+.gs-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gs-card-container:hover .gs-cover-img {
+  transform: scale(1.08);
+}
+.gs-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px dashed var(--gs-border);
+}
+.gs-placeholder-letter {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--gs-muted);
+  opacity: 0.55;
+}
+.gs-placeholder-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 1.1rem;
+  opacity: 0.7;
+}
+.gs-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--gs-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.65rem;
+}
+.gs-card-because {
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  background: rgba(14, 45, 33, 0.5);
+  border: 1px solid rgba(194, 216, 181, 0.15);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+.gs-because-tag {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gs-accent-2);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.gs-because-name {
+  color: var(--gs-text);
+  font-weight: 600;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Footer Signature Banner */
+.gs-footer-card {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border-radius: 18px;
+  background: radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15), transparent 70%),
+              linear-gradient(135deg, rgba(14, 45, 33, 0.85) 0%, rgba(6, 21, 16, 0.95) 100%);
+  border: 1px solid rgba(0, 245, 160, 0.35);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 245, 160, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.gs-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.gs-footer-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.gs-footer-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #059669 0%, #00f5a0 50%, #38bdf8 100%);
+  color: #061510;
+  font-weight: 900;
+  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 18px rgba(0, 245, 160, 0.45);
+  animation: gsPulseGlow 4s ease-in-out infinite;
+}
+.gs-footer-name {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gs-text);
+}
+.gs-footer-sub {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--gs-muted);
+}
+.gs-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.gs-footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid;
+}
+.gs-btn-portfolio-footer {
+  color: #061510 !important;
+  background: linear-gradient(135deg, #00f5a0 0%, #10b981 100%);
+  border-color: #00f5a0;
+  box-shadow: 0 4px 16px rgba(0, 245, 160, 0.35);
+}
+.gs-btn-portfolio-footer:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 245, 160, 0.5);
+}
+.gs-btn-github-footer {
+  color: var(--gs-text) !important;
+  background: rgba(14, 45, 33, 0.7);
+  border-color: var(--gs-border);
+}
+.gs-btn-github-footer:hover {
+  border-color: var(--gs-accent-2);
+  background: rgba(0, 245, 160, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 245, 160, 0.25);
+}
+.gs-footer-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  border-top: 1px solid rgba(194, 216, 181, 0.15);
+  padding-top: 0.85rem;
+}
+.gs-tech-pill {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--gs-muted);
+  background: rgba(14, 45, 33, 0.5);
+  border: 1px solid rgba(194, 216, 181, 0.18);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+a { color: var(--gs-accent-2); text-decoration: none; }
+a:hover { text-decoration: underline; }
 a:focus-visible { outline: 2px solid var(--gs-accent-2); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
+  .stApp { animation: none; }
+  .gs-gradient-word { animation: none; }
+  .gs-logo, .gs-footer-avatar { animation: none; }
+  .gs-status-dot-pulse { animation: none; }
+  .gs-card-container { animation: none; }
   .stButton > button { transition: none; }
 }
 """
@@ -498,56 +1078,136 @@ def _esc(text: str) -> str:
     return html.escape(str(text), quote=True)
 
 
+GITHUB_REPO_URL = "https://github.com/AhsanCS64/GameSenseV2"
+PORTFOLIO_URL = "https://ahsanhabibkushal.vercel.app/"
+
+
 def render_hero(catalog: Catalog) -> None:
     st.markdown(
         f"""
-<div class="gs-brand"><span class="gs-logo" aria-hidden="true">&#9654;</span>GameSense</div>
+<div class="gs-topbar">
+  <div class="gs-brand-wrap">
+    <div class="gs-brand">
+      <span class="gs-logo" aria-hidden="true">&#9654;</span>
+      <span>GameSense</span>
+    </div>
+    <span class="gs-badge-version">v2.0</span>
+    <span class="gs-status-badge">
+      <span class="gs-status-dot-wrap">
+        <span class="gs-status-dot-pulse"></span>
+        <span class="gs-status-dot"></span>
+      </span>
+      <span>Neural Ready</span>
+    </span>
+  </div>
+  <div class="gs-nav-links">
+    <a href="{GITHUB_REPO_URL}" target="_blank" rel="noopener noreferrer" class="gs-nav-btn gs-nav-github" title="View Source on GitHub">
+      <svg class="gs-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+      </svg>
+      <span>GitHub Repo</span>
+      <span class="gs-btn-arrow">&nearr;</span>
+    </a>
+    <a href="{PORTFOLIO_URL}" target="_blank" rel="noopener noreferrer" class="gs-nav-btn gs-nav-portfolio" title="Visit Ahsan Habib's Portfolio">
+      <svg class="gs-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm7.93 9h-3.18a15.65 15.65 0 0 0-1.38-4.56A8.02 8.02 0 0 1 19.93 11zm-5.95-6.79A13.8 13.8 0 0 1 15.6 11h-3.6V4.08a7.84 7.84 0 0 1 1.98.13zM10 4.08V11H6.4a13.8 13.8 0 0 1 1.62-6.79 7.84 7.84 0 0 1 1.98-.13zM4.07 13h3.18a15.65 15.65 0 0 0 1.38 4.56A8.02 8.02 0 0 1 4.07 13zm1.86-2a8.02 8.02 0 0 1 2.68-4.56A15.65 15.65 0 0 0 7.23 11zM10 19.92V13h3.6v6.92a7.84 7.84 0 0 1-1.98.13 7.84 7.84 0 0 1-1.62-.13zm4-13.13A13.8 13.8 0 0 1 15.6 13h-1.6v-6.21zm1.37 10.77A15.65 15.65 0 0 0 16.75 13h3.18a8.02 8.02 0 0 1-4.56 4.56z"/>
+      </svg>
+      <span>H. M. Ahsan Habib Kushal</span>
+      <span class="gs-btn-arrow">&nearr;</span>
+    </a>
+  </div>
+</div>
+<div class="gs-hero-wrap">
+  <h1 class="gs-hero-title">Find your next <span class="gs-gradient-word">favorite game</span>.</h1>
+  <p class="gs-hero-subtitle">
+    Tell us what you already love. A matrix-factorization model trained on real
+    Steam play histories computes your taste embedding to rank games curated for you.
+  </p>
+</div>
 """,
         unsafe_allow_html=True,
     )
-    st.title("Find your next favorite game.")
-    st.markdown(
-        "Tell us what you already love. A matrix-factorization model trained on real Steam "
-        "play histories ranks games that fit your taste.",
-    )
     c1, c2, c3 = st.columns(3)
     c1.metric("Games in catalogue", f"{len(catalog.titles):,}")
-    c2.metric("Inference", "NumPy only")
-    c3.metric("Dataset", "Steam play data")
+    c2.metric("Inference", "NumPy Only")
+    c3.metric("Dataset", "Steam Play Data")
 
 
 def render_card(game: str, because: str, players: int, rank: int, cover_uri: str | None) -> None:
-    with st.container(border=True):
-        st.markdown(
-            f'<div style="display:flex;justify-content:flex-end;margin:-6px -8px 8px -8px;">'
-            f'<span style="padding:2px 8px;border-radius:999px;font-size:0.7rem;font-weight:700;'
-            f'color:var(--gs-accent-2);background:var(--gs-surface-2);border:1px solid var(--gs-border);">#{rank}</span>'
-            f"</div>",
-            unsafe_allow_html=True,
+    cover_html = (
+        f'<div class="gs-cover-box"><img src="{cover_uri}" alt="{_esc(game)}" class="gs-cover-img" loading="lazy" /></div>'
+        if cover_uri
+        else (
+            f'<div class="gs-cover-box gs-cover-placeholder">'
+            f'<div class="gs-placeholder-letter">{_esc(game[:1].upper())}</div>'
+            f'<span class="gs-placeholder-icon">🎮</span>'
+            f'</div>'
         )
-        if cover_uri:
-            st.image(cover_uri, width="stretch")
-        else:
-            st.markdown(
-                f'<div style="height:110px;display:grid;place-items:center;'
-                f'border-radius:8px;border:1px dashed var(--gs-border);background:var(--gs-surface-2);'
-                f'color:var(--gs-muted);font-size:2.2rem;font-weight:800;letter-spacing:0.06em">'
-                f"{_esc(game[:1].upper())}</div>",
-                unsafe_allow_html=True,
-            )
-        st.markdown(
-            f'<div style="font-weight:700;font-size:0.95rem;color:var(--gs-text);line-height:1.3;margin:0.5rem 0 0.25rem;">{game}</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            f'<p style="margin:0 0 0.4rem 0;color:var(--gs-accent);font-size:0.8rem;'
-            f'line-height:1.4">Because you liked <strong style="color:var(--gs-text);">{_esc(because)}</strong></p>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            f'<div style="display:flex;align-items:center;gap:0.5rem;"><span style="font-size:0.75rem;color:var(--gs-muted)">👥 {players:,} players</span></div>',
-            unsafe_allow_html=True,
-        )
+    )
+    st.markdown(
+        f"""
+<div class="gs-card-container">
+  <div class="gs-card-header">
+    <span class="gs-rank-pill">#{rank}</span>
+    <span class="gs-player-badge">
+      <span class="gs-live-dot"></span>
+      {players:,} players
+    </span>
+  </div>
+  {cover_html}
+  <div class="gs-card-body">
+    <h3 class="gs-card-title">{_esc(game)}</h3>
+    <div class="gs-card-because">
+      <span class="gs-because-tag">Because you liked</span>
+      <strong class="gs-because-name">{_esc(because)}</strong>
+    </div>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+def render_footer(catalog: Catalog) -> None:
+    st.markdown(
+        f"""
+<div class="gs-footer-card">
+  <div class="gs-footer-top">
+    <div class="gs-footer-profile">
+      <div class="gs-footer-avatar">AH</div>
+      <div>
+        <h4 class="gs-footer-name">H. M. Ahsan Habib Kushal</h4>
+        <p class="gs-footer-sub">Software Engineering & Machine Learning • Creator of GameSense</p>
+      </div>
+    </div>
+    <div class="gs-footer-actions">
+      <a href="{PORTFOLIO_URL}" target="_blank" rel="noopener noreferrer" class="gs-footer-btn gs-btn-portfolio-footer">
+        <svg class="gs-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm7.93 9h-3.18a15.65 15.65 0 0 0-1.38-4.56A8.02 8.02 0 0 1 19.93 11zm-5.95-6.79A13.8 13.8 0 0 1 15.6 11h-3.6V4.08a7.84 7.84 0 0 1 1.98.13zM10 4.08V11H6.4a13.8 13.8 0 0 1 1.62-6.79 7.84 7.84 0 0 1 1.98-.13zM4.07 13h3.18a15.65 15.65 0 0 0 1.38 4.56A8.02 8.02 0 0 1 4.07 13zm1.86-2a8.02 8.02 0 0 1 2.68-4.56A15.65 15.65 0 0 0 7.23 11zM10 19.92V13h3.6v6.92a7.84 7.84 0 0 1-1.98.13 7.84 7.84 0 0 1-1.62-.13zm4-13.13A13.8 13.8 0 0 1 15.6 13h-1.6v-6.21zm1.37 10.77A15.65 15.65 0 0 0 16.75 13h3.18a8.02 8.02 0 0 1-4.56 4.56z"/>
+        </svg>
+        <span>Portfolio Website</span>
+        <span class="gs-btn-arrow">&nearr;</span>
+      </a>
+      <a href="{GITHUB_REPO_URL}" target="_blank" rel="noopener noreferrer" class="gs-footer-btn gs-btn-github-footer">
+        <svg class="gs-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub Repository</span>
+        <span class="gs-btn-arrow">&nearr;</span>
+      </a>
+    </div>
+  </div>
+  <div class="gs-footer-badges">
+    <span class="gs-tech-pill">🎮 Steam Matrix Factorization</span>
+    <span class="gs-tech-pill">⚡ Pure NumPy Inference</span>
+    <span class="gs-tech-pill">🌿 Green & Colorful Aesthetic</span>
+    <span class="gs-tech-pill">📊 {len(catalog.titles):,} Games Catalog</span>
+    <span class="gs-tech-pill">🚀 Streamlit App</span>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 
 def render_pills(items: list[tuple[str, str]], label: str) -> None:
@@ -790,6 +1450,9 @@ play co-occurrence within that catalogue; titles released later are not represen
         if report:
             st.markdown("**Raw evaluation report**")
             st.markdown(report)
+
+    st.markdown("")
+    render_footer(catalog)
 
     st.markdown("")
     st.caption(
